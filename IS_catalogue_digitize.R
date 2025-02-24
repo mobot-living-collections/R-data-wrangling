@@ -62,3 +62,33 @@ seed_data <- data.frame(
 # Write to Excel
 write.csv(seed_data, "seed_species.csv")
 
+
+################################################################################
+# Separate the author references from the species names
+################################################################################
+
+seed_listC <- read.csv("seed_listC.csv")
+head(seed_listC)
+summary(seed_listC)
+class(seed_listC)
+library(dplyr)
+library(stringr)
+library(tidyr)
+seed_listC <- seed_listC %>%
+  mutate(Taxon = str_extract(Taxon, "^\\w+\\s+\\w+"))
+write.csv(seed_listC, "seed_listC_taxaSeparated.csv")
+
+# fix the species that don't have the genus listed
+
+seed_listC <- read.csv("seed_species_plain.csv", stringsAsFactors = FALSE)
+
+seed_listC <- seed_listC %>%
+  mutate(Genus = ifelse(grepl("^-", Taxon), NA, word(Taxon, 1))) %>%
+  fill(Genus, .direction = "down") %>%
+  mutate(Taxon = ifelse(grepl("^-", Taxon), paste(Genus, sub("^-", "", Taxon)), Taxon)) %>%
+  select(-Genus)
+
+
+print(seed_listC)
+write.csv(seed_listC, "seed_listC.csv")
+
