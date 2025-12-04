@@ -1,4 +1,6 @@
-#4 December 2025
+# 4 December 2025
+# we have the file from Madagascar, and downloaded collection events by collector from tropicos
+# this code combines the various tropicos output files, cleans up the collector name issues, and adds a new column IsInTropicos to the database sheet
 
 library(tidyverse)
 library(readxl)
@@ -129,6 +131,7 @@ tropicos_collector_matching <- MASTER_BD_DI_17_11_2025_for_STL
 write_xlsx(tropicos_collector_matching, "TropicosCollectorMatchingDB.xlsx")
 
 write_xlsx(not_in_tropicos, "NotInTropicos.xlsx")
+
 
 
 
